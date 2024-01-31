@@ -1076,7 +1076,7 @@ checkIfScrabbleWord = do
 playGame :: Scrabble ()
 playGame = do
     game <- get
-    putStrLnIO "Enter CDP Batch Number:"
+    putStrLnIO "\nEnter CDP Batch Number:"
     n <- getLineIO
     let k = read n :: Int
     firstPlayer
