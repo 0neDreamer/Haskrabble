@@ -713,11 +713,11 @@ findOverlapLocations b (w, p) = do
     let positions = interpolatePositions (w, p)
     if isDHOrDV (w, p) == DH then do
       let fullList = zip (b !! fst (fst p)) [0 ..]
-      let overlap = filter (\x -> snd x >= (snd (fst p)) && snd x <= (snd (snd p)) && fst x /= Empty) fullList
+      let overlap = filter (\x -> snd x >= (snd (fst p)) && snd x <= (snd (snd p)) && fst x `notElem` [Empty, Home]) fullList
       ((map (\x -> (fst x, (fst (fst p), snd x))) overlap), DH)
     else if isDHOrDV (w, p) == DV then do
       let fullList = zip (transpose b !! snd (fst p)) [0 ..]
-      let overlap = filter (\x -> snd x >= (fst (fst p)) && snd x <= (fst (snd p)) && fst x /= Empty) fullList
+      let overlap = filter (\x -> snd x >= (fst (fst p)) && snd x <= (fst (snd p)) && fst x `notElem` [Empty, Home]) fullList
       ((map (\x -> (fst x, (snd x, snd (fst p)))) overlap),DV)
     else ([], ND)
 
@@ -727,14 +727,14 @@ findOverlapAndDesignate b m@(w, p) = do
     let positions = interpolatePositions m
     if isDHOrDV m == DH then do
       let fullList = zip (b !! fst (fst p)) [0 ..]
-      let overlap = filter (\x -> snd x >= (snd (fst p)) && snd x <= (snd (snd p)) && fst x /= Empty) fullList
+      let overlap = filter (\x -> snd x >= (snd (fst p)) && snd x <= (snd (snd p)) && fst x `notElem` [Empty, Home]) fullList
       let letterPositions = map (\x -> (fst x, (fst (fst p), snd x))) overlap
       let overlapPositions = map (snd) letterPositions
       let newPositions = filter (`notElem` overlapPositions) positions
       ((zip (fst m) newPositions), DH)
     else if isDHOrDV m == DV then do
       let fullList = zip (transpose b !! snd (fst p)) [0 ..]
-      let overlap = filter (\x -> snd x >= (fst (fst p)) && snd x <= (fst (snd p)) && fst x /= Empty) fullList
+      let overlap = filter (\x -> snd x >= (fst (fst p)) && snd x <= (fst (snd p)) && fst x `notElem` [Empty, Home]) fullList
       let letterPositions = map (\x -> (fst x, (snd x, snd (fst p)))) overlap
       let overlapPositions = map (snd) letterPositions
       let newPositions = filter (`notElem` overlapPositions) positions
@@ -1080,7 +1080,7 @@ playGame = do
     n <- getLineIO
     let k = read n :: Int
     firstPlayer
-    let board = {-putLetter (Home,(7,7))-} _EMPTYBOARD_ 
+    let board = putLetter (Home,(7,7)) _EMPTYBOARD_ 
     modify (\game -> game { gameBoard = board, possibleGameBoard = board, gameKey = 2 * (k-2^3 + 10) + (k-2^3) })
     modify (\game -> game { gameTilesBag = bagOfLetters letterToQuantityMap })
 
