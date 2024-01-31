@@ -1080,7 +1080,7 @@ playGame = do
     n <- getLineIO
     let k = read n :: Int
     firstPlayer
-    let board = putLetter (Home,(7,7)) _EMPTYBOARD_ 
+    let board = {-putLetter (Home,(7,7))-} _EMPTYBOARD_ 
     modify (\game -> game { gameBoard = board, possibleGameBoard = board, gameKey = 2 * (k-2^3 + 10) + (k-2^3) })
     modify (\game -> game { gameTilesBag = bagOfLetters letterToQuantityMap })
 
